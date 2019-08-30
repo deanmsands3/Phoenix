@@ -88,9 +88,9 @@ class PlotCanvas(wx.Panel):
 
         # set curser as cross-hairs
         self.defaultCursor = wx.Cursor(wx.CURSOR_ARROW)
-        self.HandCursor = wx.Cursor(wx.CURSOR_SIZING)
-        self.GrabHandCursor = wx.Cursor(wx.CURSOR_SIZING)
-        self.MagCursor = wx.Cursor(wx.CURSOR_MAGNIFIER)
+        self.HandCursor = wx.CursorFromImage(Hand.GetImage())
+        self.GrabHandCursor = wx.CursorFromImage(GrabHand.GetImage())
+        self.MagCursor = wx.CursorFromImage(MagPlus.GetImage())
         self.canvas.SetCursor(self.defaultCursor)
 
         # Things for printing

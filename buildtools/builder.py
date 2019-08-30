@@ -189,7 +189,17 @@ class AutoconfBuilder(GNUMakeBuilder):
             return 1
 
         optionsStr = " ".join(options) if options else ""
-        command = "%s %s" % (configure_cmd, optionsStr)
+        if "MSYSTEM" in os.environ:
+            conf_proc=subprocess.Popen(['cygpath', configure_cmd], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            try:
+                _stdout, _errs = conf_proc.communicate(timeout=5)
+            except TimeoutExpired:
+                conf_proc.kill()
+                _stdout, _errs = conf_proc.communicate()
+                raise RuntimeError("'cygpath' failed while processing configure command!")
+            configure_cmd = str(_stdout, encoding='utf-8').strip()
+            print(configure_cmd)
+        command = "sh %s %s" % (configure_cmd, optionsStr)
         print(command)
         result = os.system(command)
         #os.chdir(olddir)

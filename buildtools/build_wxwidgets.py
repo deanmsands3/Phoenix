@@ -189,7 +189,7 @@ def main(wxDir, args):
     if sys.platform.startswith("win"):
         contribDir = os.path.join(wxRootDir, "contrib", "build")
 
-    if sys.platform.startswith("win"):
+    if sys.platform.startswith("win") and (not "MSYSTEM" in os.environ):
         toolkit = "msvc"
     else:
         toolkit = "autoconf"

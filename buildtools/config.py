@@ -19,7 +19,7 @@ import re
 import shutil
 import subprocess
 import platform
-
+from sysconfig import _POSIX_BUILD
 from distutils.file_util import copy_file
 from distutils.dir_util  import mkpath
 from distutils.dep_util  import newer
@@ -208,7 +208,7 @@ class Configuration(object):
 
         #---------------------------------------
         # Posix (wxGTK, wxMac or mingw32) settings
-        elif os.name == 'posix' or self.COMPILER == 'mingw32':
+        elif os.name == 'posix' or self.COMPILER == 'mingw32' or self.COMPILER == 'mingw64':
             self.Verify_WX_CONFIG()
             self.includes += ['include']
             self.defines = [ #('NDEBUG',),  # using a 1-tuple makes it do an undef
@@ -224,7 +224,7 @@ class Configuration(object):
             else:
                 self.cflags.append('-O3')
 
-            lflags = self.getWxConfigValue('--libs')
+            lflags = self.getWxConfigValue('--libs all')
             self.MONOLITHIC = (lflags.find("_xrc") == -1)
             self.lflags = lflags.split()
 
@@ -514,7 +514,7 @@ class Configuration(object):
     def findLib(self, name, libdirs):
         name = self.makeLibName(name)[0]
         if os.name == 'posix' or self.COMPILER == 'mingw32':
-            lflags = self.getWxConfigValue('--libs')
+            lflags = self.getWxConfigValue('--libs  all')
             lflags = lflags.split()
 
             # if wx-config --libs output does not start with -L, wx is
@@ -568,9 +568,11 @@ class Configuration(object):
         newLFLAGS = []
         for flag in lflags:
             if flag[:2] == '-L':
-                libdirs.append(flag[2:])
+                libdirs.append(os.popen(' '.join(['cygpath', '-am', flag[2:]])).readline().strip())
             elif flag[:2] == '-l':
                 libs.append(flag[2:])
+            elif flag[:1] == '/':
+                libs.append(os.popen(' '.join(['cygpath', '-am', flag])).readline().strip())
             else:
                 newLFLAGS.append(flag)
         return newLFLAGS

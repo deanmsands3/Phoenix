@@ -120,10 +120,13 @@ class wx_install_headers(distutils.command.install_headers.install_headers):
 
         cfg = Config()
         root = self.root
+        inst_prefix = WXPREFIX
+        if _POSIX_BUILD and "MSYSTEM" in os.environ:
+            inst_prefix = os.popen(' '.join(['cygpath', '--unix', inst_prefix])).readline().strip()
         #print("WXPREFIX is %s, root is %s" % (WXPREFIX, root))
         # hack for universal builds, which append i386/ppc
         # to the root
-        if root is None or cfg.WXPREFIX.startswith(os.path.dirname(root)):
+        if root is None or inst_prefix.startswith(os.path.dirname(root)):
             root = ''
         for header, location in headers:
             install_dir = os.path.normpath(root +
@@ -289,14 +292,16 @@ def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
         # gcc needs '.res' and '.rc' compiled to object files !!!
         try:
             #self.spawn(["windres", "-i", src, "-o", obj])
-            self.spawn(["windres", "-i", src, "-o", obj] +
-                       [arg for arg in cc_args if arg.startswith("-I")] )
-        except DistutilsExecError as msg:
+            windresflags = getWxConfigValue('--rescomp')
+            windresflags = windresflags.split()
+            self.spawn(['sh', '-c', ' '.join(windresflags + ["-i", src, "-o", obj] +
+                       [arg for arg in cc_args if arg.startswith("-I")]).replace("\\", "/")])
+	    except DistutilsExecError as msg:
             raise CompileError(msg)
     else: # for other files use the C-compiler
         try:
-            self.spawn(self.compiler_so + cc_args + [src, '-o', obj] +
-                       extra_postargs)
+			self.spawn(['sh', '-c', ' '.join(self.compiler_so + cc_args + [src, '-o', obj] +
+					   extra_postargs).replace("\\", "/")])
         except DistutilsExecError as msg:
             raise CompileError(msg)
 

@@ -358,7 +358,7 @@ class PolyLine(PolyPoints):
     ===========================  =============  ====================
     Keyword and Default          Description    Type
     ===========================  =============  ====================
-    ``colour='black'``           Line color     :class:`wx.Colour`
+    ``colour=black``             wx.Pen Colour  any wx.NamedColour
     ``width=1``                  Line width     float
     ``style=wx.PENSTYLE_SOLID``  Line style     :class:`wx.PenStyle`
     ``legend=''``                Legend string  str
@@ -416,7 +416,7 @@ class PolyLine(PolyPoints):
         drawstyle = self.attributes['drawstyle']
 
         if not isinstance(colour, wx.Colour):
-            colour = wx.Colour(colour)
+            colour = wx.NamedColour(colour)
         pen = wx.Pen(colour, width, style)
         pen.SetCap(wx.CAP_BUTT)
         dc.SetPen(pen)
@@ -492,7 +492,7 @@ class PolySpline(PolyLine):
     ===========================  =============  ====================
     Keyword and Default          Description    Type
     ===========================  =============  ====================
-    ``colour='black'``           Line color     :class:`wx.Colour`
+    ``colour='black'``           Line color     :class:`wx.NamedColour`
     ``width=1``                  Line width     float
     ``style=wx.PENSTYLE_SOLID``  Line style     :class:`wx.PenStyle`
     ``legend=''``                Legend string  str
@@ -517,7 +517,7 @@ class PolySpline(PolyLine):
         width = self.attributes['width'] * printerScale * self._pointSize[0]
         style = self.attributes['style']
         if not isinstance(colour, wx.Colour):
-            colour = wx.Colour(colour)
+            colour = wx.NamedColour(colour)
         pen = wx.Pen(colour, width, style)
         pen.SetCap(wx.CAP_ROUND)
         dc.SetPen(pen)
@@ -541,10 +541,10 @@ class PolyMarker(PolyPoints):
     =================================  =============  ====================
     ``marker='circle'``                see below      str
     ``size=2``                         Marker size    float
-    ``colour='black'``                 Outline color  :class:`wx.Colour`
+    ``colour='black'``                 Outline color  :class:`wx.NamedColour`
     ``width=1``                        Outline width  float
     ``style=wx.PENSTYLE_SOLID``        Outline style  :class:`wx.PenStyle`
-    ``fillcolour=colour``              fill color     :class:`wx.Colour`
+    ``fillcolour=colour``              fill color     :class:`wx.NamedColour`
     ``fillstyle=wx.BRUSHSTYLE_SOLID``  fill style     :class:`wx.BrushStyle`
     ``legend=''``                      Legend string  str
     =================================  =============  ====================
@@ -586,9 +586,9 @@ class PolyMarker(PolyPoints):
         marker = self.attributes['marker']
 
         if colour and not isinstance(colour, wx.Colour):
-            colour = wx.Colour(colour)
+            colour = wx.NamedColour(colour)
         if fillcolour and not isinstance(fillcolour, wx.Colour):
-            fillcolour = wx.Colour(fillcolour)
+            fillcolour = wx.NamedColour(fillcolour)
 
         dc.SetPen(wx.Pen(colour, width))
         if fillcolour:
@@ -698,12 +698,12 @@ class PolyBarsBase(PolyPoints):
         fillstyle = self.attributes['fillstyle']
 
         if not isinstance(pencolour, wx.Colour):
-            pencolour = wx.Colour(pencolour)
+            pencolour = wx.NamedColour(pencolour)
         pen = wx.Pen(pencolour, penwidth, penstyle)
         pen.SetCap(wx.CAP_BUTT)
 
         if not isinstance(fillcolour, wx.Colour):
-            fillcolour = wx.Colour(fillcolour)
+            fillcolour = wx.NamedColour(fillcolour)
         brush = wx.Brush(fillcolour, fillstyle)
 
         dc.SetPen(pen)
@@ -739,10 +739,10 @@ class PolyBars(PolyBarsBase):
     Keyword and Default                Description    Type
     =================================  =============  =======================
     ``barwidth=1.0``                   bar width      float or list of floats
-    ``edgecolour='black'``             edge color     :class:`wx.Colour`
+    ``edgecolour='black'``             edge color     :class:`wx.NamedColour`
     ``edgewidth=1``                    edge width     float
     ``edgestyle=wx.PENSTYLE_SOLID``    edge style     :class:`wx.PenStyle`
-    ``fillcolour='red'``               fill color     :class:`wx.Colour`
+    ``fillcolour='red'``               fill color     :class:`wx.NamedColour`
     ``fillstyle=wx.BRUSHSTYLE_SOLID``  fill style     :class:`wx.BrushStyle`
     ``legend=''``                      legend string  str
     =================================  =============  =======================
@@ -808,10 +808,10 @@ class PolyHistogram(PolyBarsBase):
     =================================  =============  =======================
     Keyword and Default                Description    Type
     =================================  =============  =======================
-    ``edgecolour='black'``             edge color     :class:`wx.Colour`
+    ``edgecolour='black'``             edge color     :class:`wx.NamedColour`
     ``edgewidth=3``                    edge width     float
     ``edgestyle=wx.PENSTYLE_SOLID``    edge style     :class:`wx.PenStyle`
-    ``fillcolour='blue'``              fill color     :class:`wx.Colour`
+    ``fillcolour='blue'``              fill color     :class:`wx.NamedColour`
     ``fillstyle=wx.BRUSHSTYLE_SOLID``  fill style     :class:`wx.BrushStyle`
     ``legend=''``                      legend string  str
     =================================  =============  =======================
@@ -875,7 +875,7 @@ class PolyBoxPlot(PolyPoints):
     =================================  =============  =======================
     Keyword and Default                Description    Type
     =================================  =============  =======================
-    ``colour='black'``                 edge color     :class:`wx.Colour`
+    ``colour='black'``                 edge color     :class:`wx.NamedColour`
     ``width=1``                        edge width     float
     ``style=wx.PENSTYLE_SOLID``        edge style     :class:`wx.PenStyle`
     ``legend=''``                      legend string  str
